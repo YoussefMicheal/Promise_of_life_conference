@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Promise of Life Conference</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --gold: #B8922A;
+      --gold-light: #D4A93A;
+      --gold-dark: #8B6914;
+      --sidebar-w: 250px;
+      --bg: #F7F3EC;
+      --bg2: #EDE6D6;
+      --panel: #FFFFFF;
+      --panel-hover: #F5EFE3;
+      --border: rgba(184,146,42,0.25);
+      --text: #1E1408;
+      --text-muted: #8A7550;
+      --sidebar-bg: #FFFFFF;
+      --topbar-bg: #FFFFFF;
+      --shadow: 0 2px 16px rgba(184,146,42,0.10);
+      --modal-bg: #FFFFFF;
+      --modal-overlay: rgba(30,20,8,0.45);
+      --active-nav-bg: #FDF6E8;
+    }
+    body.dark {
+      --bg: #15100A;
+      --bg2: #1E1608;
+      --panel: #221A0C;
+      --panel-hover: #2A2010;
+      --border: rgba(184,146,42,0.2);
+      --text: #F2E8CE;
+      --text-muted: #A08B5A;
+      --sidebar-bg: #1A1208;
+      --topbar-bg: #1A1208;
+      --shadow: 0 2px 20px rgba(0,0,0,0.4);
+      --modal-bg: #221A0C;
+      --modal-overlay: rgba(0,0,0,0.7);
+      --active-nav-bg: #2A1E08;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Lora', serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; transition: background 0.3s, color 0.3s; }
+
+    /* SIDEBAR */
+    .sidebar { width: var(--sidebar-w); background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; box-shadow: var(--shadow); transition: background 0.3s; overflow-y: auto; }
+    .sidebar-logo { padding: 28px 20px 22px; text-align: center; border-bottom: 1px solid var(--border); }
+    .sidebar-logo .cross { font-size: 2rem; color: var(--gold); display: block; margin-bottom: 8px; }
+    .sidebar-logo h2 { font-family: 'Cinzel', serif; font-size: 0.8rem; color: var(--gold); font-weight: 700; letter-spacing: 0.06em; line-height: 1.6; text-transform: uppercase; }
+    .sidebar-nav { flex: 1; padding: 14px 0; }
+    .nav-section-label { font-size: 0.6rem; letter-spacing: 0.14em; color: var(--text-muted); padding: 10px 20px 3px; text-transform: uppercase; font-family: 'Cinzel', serif; }
+    .nav-item { display: flex; align-items: center; gap: 11px; padding: 11px 20px; cursor: pointer; transition: background 0.18s, color 0.18s; color: var(--text-muted); font-size: 0.875rem; border-left: 3px solid transparent; }
+    .nav-item:hover { background: var(--panel-hover); color: var(--gold); }
+    .nav-item.active { background: var(--active-nav-bg); color: var(--gold); border-left-color: var(--gold); }
+    .nav-item .icon { font-size: 1.05rem; width: 20px; text-align: center; flex-shrink: 0; }
+
+    /* MAIN */
+    .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+    .topbar { background: var(--topbar-bg); border-bottom: 1px solid var(--border); padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; box-shadow: var(--shadow); transition: background 0.3s; }
+    .topbar-title { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold); letter-spacing: 0.04em; }
+    .topbar-right { display: flex; align-items: center; gap: 14px; }
+    .topbar-date { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* Theme toggle */
+    .theme-toggle { background: var(--bg2); border: 1px solid var(--border); border-radius: 50px; width: 56px; height: 28px; cursor: pointer; position: relative; transition: background 0.3s; flex-shrink: 0; display: flex; align-items: center; }
+    .theme-toggle .knob { position: absolute; left: 4px; width: 20px; height: 20px; border-radius: 50%; background: var(--gold); transition: transform 0.3s; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+    body.dark .theme-toggle .knob { transform: translateX(28px); }
+
+    /* CONTENT */
+    .content { padding: 32px; display: none; flex-direction: column; gap: 28px; animation: fadeUp 0.3s ease; }
+    .content.active { display: flex; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    .section-title { font-family: 'Cinzel', serif; font-size: 1.25rem; color: var(--gold); padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; letter-spacing: 0.04em; }
+    .ornament { text-align: center; color: var(--gold-dark); font-size: 1rem; letter-spacing: 0.4em; margin: 4px 0; opacity: 0.55; }
+
+    /* HOME BANNER */
+    .home-banner { background: linear-gradient(135deg,#FDF6E3,#F5E8C0); border: 1px solid var(--gold); border-radius: 14px; padding: 30px 32px; text-align: center; }
+    body.dark .home-banner { background: linear-gradient(135deg,#2E2008,#1E1608); }
+    .home-banner h1 { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--gold); margin-bottom: 8px; letter-spacing: 0.05em; }
+    .home-banner p { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+
+    /* PODIUM */
+    .podium-wrap { display: flex; justify-content: center; align-items: flex-end; gap: 24px; padding: 12px 0 0; flex-wrap: wrap; }
+    .team-card { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .rank-label { font-size: 0.68rem; letter-spacing: 0.1em; color: var(--text-muted); text-transform: uppercase; font-family: 'Cinzel', serif; }
+    .team-photo { border-radius: 50%; background: var(--bg2); border: 3px solid var(--border); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; transition: background 0.3s; }
+    .team-photo svg { opacity: 0.28; }
+    .team-photo .photo-label { position: absolute; bottom: 7px; font-size: 0.56rem; color: var(--text-muted); font-family: 'Cinzel', serif; letter-spacing: 0.06em; }
+    .rank-1 .team-photo { width: 120px; height: 120px; border-color: var(--gold); border-width: 4px; }
+    .rank-2 .team-photo { width: 100px; height: 100px; border-color: #A0A0A0; }
+    .rank-3 .team-photo { width: 90px; height: 90px; border-color: #B0722A; }
+    .team-podium-block { border-radius: 10px 10px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; padding: 14px 18px 18px; }
+    .rank-1 .team-podium-block { background: linear-gradient(180deg,#FDF3DC,#F5E8C0); border: 1px solid var(--gold); min-height: 90px; min-width: 148px; }
+    .rank-2 .team-podium-block { background: linear-gradient(180deg,#F2F2F2,#E2E2E2); border: 1px solid #C0C0C0; min-height: 72px; min-width: 136px; }
+    .rank-3 .team-podium-block { background: linear-gradient(180deg,#FBE8D4,#F0D4B0); border: 1px solid #C8903A; min-height: 58px; min-width: 124px; }
+    body.dark .rank-1 .team-podium-block { background: linear-gradient(180deg,#3A2A06,#28180A); }
+    body.dark .rank-2 .team-podium-block { background: linear-gradient(180deg,#2A2A2A,#1E1E1E); border-color: #888; }
+    body.dark .rank-3 .team-podium-block { background: linear-gradient(180deg,#3A2010,#281508); }
+    .team-rank-badge { font-size: 1.6rem; }
+    .team-name { font-family: 'Cinzel', serif; font-weight: 600; text-align: center; color: var(--text); font-size: 0.88rem; }
+    .rank-1 .team-name { color: var(--gold-dark); }
+    body.dark .rank-1 .team-name { color: var(--gold-light); }
+    .team-score { font-size: 0.72rem; color: var(--text-muted); font-style: italic; }
+
+    /* QUICK LINKS */
+    .quick-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px,1fr)); gap: 14px; }
+    .quick-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s; box-shadow: var(--shadow); }
+    .quick-card:hover { border-color: var(--gold); box-shadow: 0 4px 20px rgba(184,146,42,0.13); }
+    .quick-card .q-icon { font-size: 1.6rem; margin-bottom: 8px; }
+    .quick-card h3 { font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--gold); margin-bottom: 4px; }
+    .quick-card p { font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* FORUMS */
+    .forums-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap: 16px; }
+    .forum-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s; box-shadow: var(--shadow); }
+    .forum-card:hover { border-color: var(--gold); box-shadow: 0 4px 20px rgba(184,146,42,0.13); }
+    .forum-card .forum-icon { font-size: 1.6rem; margin-bottom: 10px; }
+    .forum-card h3 { font-family: 'Cinzel', serif; font-size: 0.88rem; color: var(--gold); margin-bottom: 5px; }
+    .forum-card p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+    .forum-card .meta { display: flex; justify-content: space-between; margin-top: 14px; font-size: 0.7rem; color: var(--text-muted); }
+    .btn-gold { display: inline-flex; align-items: center; gap: 7px; background: var(--gold); color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-family: 'Cinzel', serif; font-size: 0.78rem; cursor: pointer; transition: opacity 0.2s; letter-spacing: 0.04em; }
+    .btn-gold:hover { opacity: 0.85; }
+
+    /* HYMNS */
+    .hymns-list { display: flex; flex-direction: column; gap: 10px; }
+    .hymn-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; transition: border-color 0.2s; box-shadow: var(--shadow); }
+    .hymn-card:hover { border-color: var(--gold); }
+    .hymn-num { font-family: 'Cinzel', serif; font-size: 1.2rem; color: var(--gold-dark); min-width: 30px; text-align: center; }
+    .hymn-info { flex: 1; }
+    .hymn-title-btn { font-family: 'Cinzel', serif; font-size: 0.92rem; color: var(--gold); background: none; border: none; cursor: pointer; padding: 0; text-align: left; text-decoration: underline; text-decoration-color: transparent; transition: text-decoration-color 0.2s; }
+    .hymn-title-btn:hover { text-decoration-color: var(--gold); }
+    .hymn-info p { font-size: 0.74rem; color: var(--text-muted); margin-top: 3px; font-style: italic; }
+    .hymn-sc-btn { display: flex; align-items: center; gap: 6px; background: #FF5500; color: white; border: none; border-radius: 20px; padding: 8px 14px; font-size: 0.74rem; cursor: pointer; text-decoration: none; transition: opacity 0.2s; font-family: 'Lora', serif; flex-shrink: 0; white-space: nowrap; }
+    .hymn-sc-btn:hover { opacity: 0.85; }
+
+    /* MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: var(--modal-overlay); z-index: 500; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from {opacity:0} to {opacity:1} }
+    .modal { background: var(--modal-bg); border: 1px solid var(--border); border-radius: 16px; max-width: 580px; width: 100%; max-height: 82vh; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.25); animation: slideUp 0.25s ease; }
+    @keyframes slideUp { from {transform:translateY(28px);opacity:0} to {transform:translateY(0);opacity:1} }
+    .modal-header { padding: 22px 24px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .modal-hymn-title { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--gold); margin-bottom: 3px; }
+    .modal-hymn-sub { font-size: 0.76rem; color: var(--text-muted); font-style: italic; }
+    .modal-close { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1.3rem; line-height: 1; padding: 3px 7px; border-radius: 6px; transition: color 0.2s, background 0.2s; }
+    .modal-close:hover { color: var(--text); background: var(--panel-hover); }
+    .modal-body { padding: 22px 24px; overflow-y: auto; flex: 1; }
+    .hymn-lyrics { font-size: 0.9rem; line-height: 2.1; color: var(--text); }
+    .hymn-lyrics .verse { margin-bottom: 18px; }
+    .hymn-lyrics .chorus { font-style: italic; color: var(--gold-dark); border-left: 3px solid var(--gold); padding-left: 14px; margin: 18px 0; }
+    body.dark .hymn-lyrics .chorus { color: var(--gold-light); }
+    .verse-label { font-family: 'Cinzel', serif; font-size: 0.62rem; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+    .modal-footer { padding: 14px 24px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .modal-footer p { font-size: 0.74rem; color: var(--text-muted); font-style: italic; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span class="cross">✝</span>
+    <h2>Promise of Life<br/>Conference</h2>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main Menu</div>
+    <div class="nav-item active" id="nav-home" onclick="showPage('home',this)"><span class="icon">🏠</span> Home</div>
+    <div class="nav-section-label">Community</div>
+    <div class="nav-item" id="nav-forums" onclick="showPage('forums',this)"><span class="icon">💬</span> Forums</div>
+    <div class="nav-section-label">Worship</div>
+    <div class="nav-item" id="nav-hymns" onclick="showPage('hymns',this)"><span class="icon">🎵</span> Arabic Hymns</div>
+    <div class="nav-section-label">Teams</div>
+    <div class="nav-item" id="nav-teams" onclick="showPage('teams',this)"><span class="icon">🏆</span> Team Rankings</div>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <span class="topbar-title">✝ Promise of Life Conference</span>
+    <div class="topbar-right">
+      <span class="topbar-date" id="topbar-date"></span>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle light / dark">
+        <span class="knob" id="theme-knob">☀️</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div class="content active" id="page-home">
+    <div class="home-banner">
+      <h1>✝ Promise of Life Conference</h1>
+      <p>Welcome to our community — worship, grow, and serve together in faith.</p>
+    </div>
+    <div>
+      <div class="section-title">🏆 Team Rankings</div>
+      <div class="ornament">✦ ✦ ✦</div>
+      <div class="podium-wrap">
+        <div class="team-card rank-2">
+          <span class="rank-label">2nd Place</span>
+          <div class="team-photo"><svg width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="38" r="20" fill="#888"/><ellipse cx="50" cy="80" rx="32" ry="20" fill="#888"/></svg><span class="photo-label">TEAM PHOTO</span></div>
+          <div class="team-podium-block"><span class="team-rank-badge">🥈</span><span class="team-name">Team Grace</span><span class="team-score">920 points</span></div>
+        </div>
+        <div class="team-card rank-1">
+          <span class="rank-label">1st Place</span>
+          <div class="team-photo"><svg width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="46" r="24" fill="#C9A84C"/><ellipse cx="60" cy="96" rx="38" ry="24" fill="#C9A84C"/></svg><span class="photo-label">TEAM PHOTO</span></div>
+          <div class="team-podium-block"><span class="team-rank-badge">🥇</span><span class="team-name">Team Love</span><span class="team-score">1,150 points</span></div>
+        </div>
+        <div class="team-card rank-3">
+          <span class="rank-label">3rd Place</span>
+          <div class="team-photo"><svg width="90" height="90" viewBox="0 0 90 90"><circle cx="45" cy="34" r="18" fill="#CD7F32"/><ellipse cx="45" cy="72" rx="28" ry="18" fill="#CD7F32"/></svg><span class="photo-label">TEAM PHOTO</span></div>
+          <div class="team-podium-block"><span class="team-rank-badge">🥉</span><span class="team-name">Team Faith</span><span class="team-score">840 points</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="ornament">✦ ✦ ✦</div>
+    <div>
+      <div class="section-title">📌 Quick Links</div>
+      <div class="quick-links" style="margin-top:14px">
+        <div class="quick-card" onclick="showPage('forums', document.getElementById('nav-forums'))"><div class="q-icon">💬</div><h3>Forums</h3><p>Join discussions, ask questions, share reflections</p></div>
+        <div class="quick-card" onclick="showPage('hymns', document.getElementById('nav-hymns'))"><div class="q-icon">🎵</div><h3>Arabic Hymns</h3><p>Read lyrics and listen on SoundCloud</p></div>
+        <div class="quick-card" onclick="showPage('teams', document.getElementById('nav-teams'))"><div class="q-icon">🏆</div><h3>Team Rankings</h3><p>Full standings and team details</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORUMS -->
+  <div class="content" id="page-forums">
+    <div class="section-title">💬 Forums</div>
+    <div><button class="btn-gold">✏️ New Topic</button></div>
+    <div class="forums-grid">
+      <div class="forum-card"><div class="forum-icon">📖</div><h3>Bible Study</h3><p>Dive into scripture passages and share insights with the community.</p><div class="meta"><span>24 topics</span><span>120 replies</span></div></div>
+      <div class="forum-card"><div class="forum-icon">🙏</div><h3>Prayer Requests</h3><p>Share your requests and support one another through prayer.</p><div class="meta"><span>15 topics</span><span>87 replies</span></div></div>
+      <div class="forum-card"><div class="forum-icon">✝️</div><h3>Sermons & Teaching</h3><p>Discuss sermons, messages, and spiritual lessons.</p><div class="meta"><span>31 topics</span><span>204 replies</span></div></div>
+      <div class="forum-card"><div class="forum-icon">🎶</div><h3>Worship & Hymns</h3><p>Everything about praise songs and Arabic church music.</p><div class="meta"><span>18 topics</span><span>93 replies</span></div></div>
+      <div class="forum-card"><div class="forum-icon">👨‍👩‍👧</div><h3>Family & Youth</h3><p>Tips and ideas for building strong Christian families.</p><div class="meta"><span>22 topics</span><span>145 replies</span></div></div>
+      <div class="forum-card"><div class="forum-icon">📢</div><h3>Announcements</h3><p>Church news, activities, and upcoming events.</p><div class="meta"><span>8 topics</span><span>52 replies</span></div></div>
+    </div>
+  </div>
+
+  <!-- HYMNS -->
+  <div class="content" id="page-hymns">
+    <div class="section-title">🎵 Arabic Hymns</div>
+    <p style="font-size:0.8rem;color:var(--text-muted);font-style:italic;margin-top:-12px">Click a hymn title to read its lyrics · Click the orange button to listen on SoundCloud</p>
+    <div class="hymns-list" id="hymns-list"></div>
+  </div>
+
+  <!-- TEAMS -->
+  <div class="content" id="page-teams">
+    <div class="section-title">🏆 Full Team Rankings</div>
+    <div class="podium-wrap">
+      <div class="team-card rank-2">
+        <span class="rank-label">2nd Place</span>
+        <div class="team-photo"><svg width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="38" r="20" fill="#888"/><ellipse cx="50" cy="80" rx="32" ry="20" fill="#888"/></svg><span class="photo-label">TEAM PHOTO</span></div>
+        <div class="team-podium-block"><span class="team-rank-badge">🥈</span><span class="team-name">Team Grace</span><span class="team-score">920 points</span></div>
+      </div>
+      <div class="team-card rank-1">
+        <span class="rank-label">1st Place</span>
+        <div class="team-photo"><svg width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="46" r="24" fill="#C9A84C"/><ellipse cx="60" cy="96" rx="38" ry="24" fill="#C9A84C"/></svg><span class="photo-label">TEAM PHOTO</span></div>
+        <div class="team-podium-block"><span class="team-rank-badge">🥇</span><span class="team-name">Team Love</span><span class="team-score">1,150 points</span></div>
+      </div>
+      <div class="team-card rank-3">
+        <span class="rank-label">3rd Place</span>
+        <div class="team-photo"><svg width="90" height="90" viewBox="0 0 90 90"><circle cx="45" cy="34" r="18" fill="#CD7F32"/><ellipse cx="45" cy="72" rx="28" ry="18" fill="#CD7F32"/></svg><span class="photo-label">TEAM PHOTO</span></div>
+        <div class="team-podium-block"><span class="team-rank-badge">🥉</span><span class="team-name">Team Faith</span><span class="team-score">840 points</span></div>
+      </div>
+    </div>
+    <p style="text-align:center;color:var(--text-muted);font-size:0.78rem;font-style:italic;margin-top:12px">Update team names, scores, and photos anytime.</p>
+  </div>
+</main>
+
+<!-- HYMN LYRICS MODAL -->
+<div class="modal-overlay" id="hymn-modal" onclick="closeModalOnOverlay(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-hymn-title" id="modal-title"></div>
+        <div class="modal-hymn-sub" id="modal-sub"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="hymn-lyrics" id="modal-lyrics"></div>
+    </div>
+    <div class="modal-footer">
+      <p>Open on SoundCloud to listen ↗</p>
+      <a class="hymn-sc-btn" id="modal-sc-link" href="#" target="_blank" rel="noopener">☁️ Listen on SoundCloud</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // DATE
+  document.getElementById('topbar-date').textContent =
+    new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  // THEME
+  function toggleTheme() {
+    const dark = document.body.classList.toggle('dark');
+    document.getElementById('theme-knob').textContent = dark ? '🌙' : '☀️';
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+  }
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark');
+    document.getElementById('theme-knob').textContent = '🌙';
+  }
+
+  // NAV
+  function showPage(id, el) {
+    document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    if (el) el.classList.add('active');
+  }
+
+  // HYMNS DATA
+  const hymns = [
+    {
+      title: "يا رب العالمين",
+      subtitle: "Morning Praise Hymn",
+      soundcloud: "https://soundcloud.com/search?q=%D9%8A%D8%A7+%D8%B1%D8%A8+%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85%D9%8A%D9%86",
+      lyrics: `<div class="verse"><div class="verse-label">Verse 1</div>يا رب العالمين، يا نور الحياة\nأنت الحاكم المبين، يا منبع البركات\nإليك نرفع أصواتنا بالتسبيح والثناء\nفأنت وحدك إلهنا، ملء الأرض والسماء</div><div class="chorus"><div class="verse-label">Chorus</div>مجدًا لك يا رب، مجدًا في الأعالي\nوعلى الأرض السلام، لكل من يحبك\nمجدًا لك يا رب، إلى الأبد والأبد</div><div class="verse"><div class="verse-label">Verse 2</div>بيدك الجبارة تمسك بنا\nوبمحبتك الكبيرة تحوطنا\nلا نخشى شيئًا ما دمت معنا\nأنت الحصن والملجأ لكل من يرجوك</div>`
+    },
+    {
+      title: "المجد لله في الأعالي",
+      subtitle: "Christmas Hymn",
+      soundcloud: "https://soundcloud.com/search?q=%D8%A7%D9%84%D9%85%D8%AC%D8%AF+%D9%84%D9%84%D9%87+%D9%81%D9%8A+%D8%A7%D9%84%D8%A7%D8%B9%D8%A7%D9%84%D9%8A",
+      lyrics: `<div class="verse"><div class="verse-label">Verse 1</div>المجد لله في الأعالي\nوعلى الأرض السلام\nللبشر المسرة والرجاء\nفي مجيء الملك العظيم</div><div class="chorus"><div class="verse-label">Chorus</div>مجدًا، مجدًا، مجدًا لله\nفي السماء وفي الأرض\nيسوع الملك وُلد اليوم\nهللويا، هللويا، هللويا</div><div class="verse"><div class="verse-label">Verse 2</div>الرعاة سمعوا الملائكة\nتغني في الليل البهيم\nفأسرعوا إلى المغارة\nووجدوا الطفل العظيم</div>`
+    },
+    {
+      title: "تعالى أيها الروح القدس",
+      subtitle: "Pentecost Hymn",
+      soundcloud: "https://soundcloud.com/search?q=%D8%AA%D8%B9%D8%A7%D9%84%D9%89+%D8%A7%D9%8A%D9%87%D8%A7+%D8%A7%D9%84%D8%B1%D9%88%D8%AD+%D8%A7%D9%84%D9%82%D8%AF%D8%B3",
+      lyrics: `<div class="verse"><div class="verse-label">Verse 1</div>تعالى أيها الروح القدس\nملأ قلوبنا بنارك\nأشعل فينا جذوة الإيمان\nوأنر دربنا بنورك</div><div class="chorus"><div class="verse-label">Chorus</div>يا روح الله، يا روح القوة\nتعالى واملأ كل مكان\nنفخ فينا روح الحياة\nكما نفخت في آدم من طين</div><div class="verse"><div class="verse-label">Verse 2</div>أنت المعزي في الشدائد\nأنت السند في الضعف والعجز\nبك نقوى ونمضي للأمام\nونحمل صليبنا باستحقاق</div>`
+    },
+    {
+      title: "نشيد الفداء",
+      subtitle: "Passion & Resurrection Hymn",
+      soundcloud: "https://soundcloud.com/search?q=%D9%86%D8%B4%D9%8A%D8%AF+%D8%A7%D9%84%D9%81%D8%AF%D8%A7%D8%A1",
+      lyrics: `<div class="verse"><div class="verse-label">Verse 1</div>على خشبة الصليب ذبح الحمل\nوسفك دمه الطاهر من أجلنا\nيسوع القدير احتمل الألم\nليمنحنا الخلاص والحرية</div><div class="chorus"><div class="verse-label">Chorus</div>قام المسيح من الأموات\nودمر الموت بالموت\nومنح الحياة لمن في القبور\nهللويا، هللويا، المسيح قام</div><div class="verse"><div class="verse-label">Verse 2</div>القبر لم يستطع أن يحبسه\nولا الحجر المختوم يمنعه\nقام في اليوم الثالث منتصرًا\nوظهر لتلاميذه بالمجد</div>`
+    },
+    {
+      title: "يسوع نور حياتي",
+      subtitle: "Youth & Children Hymn",
+      soundcloud: "https://soundcloud.com/search?q=%D9%8A%D8%B3%D9%88%D8%B9+%D9%86%D9%88%D8%B1+%D8%AD%D9%8A%D8%A7%D8%AA%D9%8A",
+      lyrics: `<div class="verse"><div class="verse-label">Verse 1</div>يسوع نور حياتي، في دربي يضيء\nيمسك بيدي الصغيرة ولا يتركني\nأمشي معه كل يوم، لا أخاف الظلام\nلأنه معي دائمًا في كل مكان</div><div class="chorus"><div class="verse-label">Chorus</div>يسوع، يسوع، يسوع\nأحبك يا ربي من كل قلبي\nيسوع، يسوع، يسوع\nأنت صديقي وفرحي إلى الأبد</div><div class="verse"><div class="verse-label">Verse 2</div>يسوع يحب الأطفال الصغار\nقال تعالوا إليّ ولا تخافوا\nفأنا راعيكم الأمين الوفي\nوأحملكم على كتفي بفرح</div>`
+    },
+    {
+      title: "الرب راعيّ",
+      subtitle: "Psalm 23 — Chant",
+      soundcloud: "https://soundcloud.com/search?q=%D8%A7%D9%84%D8%B1%D8%A8+%D8%B1%D8%A7%D8%B9%D9%8A+%D9%85%D8%B2%D9%85%D9%88%D8%B1",
+      lyrics: `<div class="verse"><div class="verse-label">Psalm 23</div>الرب راعيّ فلا يعوزني شيء\nفي مراعٍ خضراء يُربضني\nإلى مياه الراحة يقودني\nيُعيد نفسي ويهديني سبل البر من أجل اسمه</div><div class="chorus"><div class="verse-label">Response</div>وأنا أسكن في بيت الرب\nإلى مدى الأيام والأبد\nلأن الله معي في كل حين\nوعصاه وعكازه هما يعزيانني</div><div class="verse"><div class="verse-label">Verse 2</div>حتى إن سلكت في وادي ظل الموت\nلا أخاف شرًا لأنك أنت معي\nتُرتّب قدامي مائدة\nأمام مضايقيّ، وكأسي ريّا</div>`
+    },
+    {
+      title: "صلاة الغروب",
+      subtitle: "Evening Prayer Hymn",
+      soundcloud: "https://soundcloud.com/search?q=%D8%B5%D9%84%D8%A7%D8%A9+%D8%A7%D9%84%D8%BA%D8%B1%D9%88%D8%A8",
+      lyrics: `<div class="verse"><div class="verse-label">Verse 1</div>يا رب عند غروب الشمس\nنرفع إليك قلوبنا بالشكر\nحفظتنا طوال هذا النهار\nبنعمتك التي لا تنتهي</div><div class="chorus"><div class="verse-label">Chorus</div>يا ربي، ابقَ معنا\nفالمساء قد حان والليل يقترب\nلا نريد سواك شيئًا\nأنت نور الليل ونور النهار</div><div class="verse"><div class="verse-label">Verse 2</div>في هدوء الليل نلجأ إليك\nونضع أنفسنا بين يديك\nاحرسنا وأهلنا وأحبائنا\nوأيقظنا غدًا بنعمتك</div>`
+    },
+    {
+      title: "سبحوا الرب يا جميع الأمم",
+      subtitle: "Congregation & Celebration",
+      soundcloud: "https://soundcloud.com/search?q=%D8%B3%D8%A8%D8%AD%D9%88%D8%A7+%D8%A7%D9%84%D8%B1%D8%A8",
+      lyrics: `<div class="verse"><div class="verse-label">Verse 1</div>سبحوا الرب يا جميع الأمم\nمجدوه يا سائر الشعوب\nلأن رحمته قد قويت علينا\nوحق الرب يدوم إلى الأبد</div><div class="chorus"><div class="verse-label">Chorus</div>هللويا، هللويا، هللويا\nسبحوا الله في قدسه\nسبحوه في فلك قوته\nسبحوه على أعماله العظيمة</div><div class="verse"><div class="verse-label">Verse 2</div>كل نسمة فلتسبح الرب\nوالكل يصرخ بصوت واحد\nمجدًا للآب والابن والروح\nمن الآن وإلى الأبد، آمين</div>`
+    }
+  ];
+
+  // Build hymn cards
+  const list = document.getElementById('hymns-list');
+  hymns.forEach((h, i) => {
+    const card = document.createElement('div');
+    card.className = 'hymn-card';
+    card.innerHTML = `
+      <div class="hymn-num">${i + 1}</div>
+      <div class="hymn-info">
+        <button class="hymn-title-btn" onclick="openHymn(${i})">${h.title}</button>
+        <p>${h.subtitle}</p>
+      </div>
+      <a class="hymn-sc-btn" href="${h.soundcloud}" target="_blank" rel="noopener">☁️ Listen on SoundCloud</a>
+    `;
+    list.appendChild(card);
+  });
+
+  // Modal
+  function openHymn(i) {
+    const h = hymns[i];
+    document.getElementById('modal-title').textContent = h.title;
+    document.getElementById('modal-sub').textContent = h.subtitle;
+    document.getElementById('modal-lyrics').innerHTML = h.lyrics;
+    document.getElementById('modal-sc-link').href = h.soundcloud;
+    document.getElementById('hymn-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('hymn-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeModalOnOverlay(e) {
+    if (e.target === document.getElementById('hymn-modal')) closeModal();
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
