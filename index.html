@@ -4,6 +4,8 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>VIVA 2026</title>
+  <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/YoussefMicheal/Promise_of_life_conference/main/2.jpeg">
+  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/YoussefMicheal/Promise_of_life_conference/main/2.jpeg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -49,6 +51,8 @@
     .schedule-divider { border-color: #f1f5f9; }
     .comp-link-btn { background: #f0f9ff; border: 1px solid #bae6fd; color: #0369a1; }
     .comp-link-btn:hover { background: #e0f2fe; }
+    .menu-btn { color: #334155; }
+    .menu-btn:hover { background: #f1f5f9; }
 
     /* DARK */
     body.dark { background: #030712; color: #f1f5f9; }
@@ -87,32 +91,73 @@
     body.dark .schedule-divider { border-color: #374151; }
     body.dark .comp-link-btn { background: rgba(14,116,144,0.15); border-color: #164e63; color: #7dd3fc; }
     body.dark .comp-link-btn:hover { background: rgba(14,116,144,0.25); }
+    body.dark .menu-btn { color: #e2e8f0; }
+    body.dark .menu-btn:hover { background: #1f2937; }
 
     /* LAYOUT */
-    .sidebar { width: 240px; min-height: 100vh; display: flex; flex-direction: column; position: fixed; right: 0; top: 0; bottom: 0; z-index: 100; overflow-y: auto; }
-    .sidebar-logo-area { padding: 20px; text-align: center; border-bottom: 1px solid transparent; }
+    .sidebar {
+      width: 260px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 200;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.28s ease;
+    }
+    .sidebar.open { transform: translateX(0); }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.45);
+      z-index: 150;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .sidebar-overlay.show { display: block; opacity: 1; }
+
+    .sidebar-logo-area { padding: 20px; text-align: center; border-bottom: 1px solid transparent; position: relative; }
     body .sidebar-logo-area { border-bottom-color: #e2e8f0; }
     body.dark .sidebar-logo-area { border-bottom-color: #1f2937; }
     .sidebar-logo-area img { width: 110px; border-radius: 12px; display: block; margin: 0 auto 8px; }
     .sidebar-logo-area span { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: #94a3b8; }
     body.dark .sidebar-logo-area span { color: #374151; }
+    .sidebar-close-btn {
+      position: absolute; top: 12px; left: 12px;
+      background: transparent; border: none; cursor: pointer;
+      font-size: 18px; color: #94a3b8; padding: 6px; border-radius: 8px; line-height: 1;
+    }
+    body.dark .sidebar-close-btn { color: #4b5563; }
     .sidebar-nav { flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
     .nav-label { font-size: 10px; letter-spacing: 0.12em; padding: 8px 12px 2px; text-transform: uppercase; font-weight: 700; }
     .nav-btn { display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-radius: 12px; border: none; border-right: 3px solid transparent; cursor: pointer; width: 100%; font-family: 'Cairo', sans-serif; font-size: 13px; font-weight: 600; text-align: right; transition: background 0.18s, color 0.18s; background: transparent; }
     .nav-btn .icon { font-size: 16px; }
     .sidebar-footer { padding: 14px; text-align: center; font-size: 11px; }
 
-    .main { margin-right: 240px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
-    .topbar { padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+    .main { margin-right: 0; flex: 1; display: flex; flex-direction: column; min-height: 100vh; width: 100%; }
+    .topbar { padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; gap: 10px; }
     .topbar-left { display: flex; align-items: center; gap: 10px; }
+    .menu-btn {
+      background: transparent; border: none; cursor: pointer;
+      font-size: 20px; padding: 6px 8px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
     .topbar-left img { height: 32px; border-radius: 8px; }
-    .topbar-title { font-size: 14px; font-weight: 700; }
-    .topbar-center { font-size: 15px; font-weight: 700; }
-    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .topbar-title { font-size: 14px; font-weight: 700; white-space: nowrap; }
+    .topbar-center { font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
     .topbar-date { font-size: 12px; }
 
     .toggle-wrap { display: flex; align-items: center; cursor: pointer; }
-    .toggle-bg { width: 48px; height: 24px; border-radius: 50px; position: relative; transition: background 0.3s; }
+    .toggle-bg { width: 48px; height: 24px; border-radius: 50px; position: relative; transition: background 0.3s; flex-shrink: 0; }
     .toggle-knob { position: absolute; width: 18px; height: 18px; border-radius: 50%; top: 3px; left: 3px; display: flex; align-items: center; justify-content: center; font-size: 11px; transition: transform 0.3s; }
     body.dark .toggle-knob { transform: translateX(24px); }
 
@@ -131,7 +176,6 @@
 
     /* TEAMS GRID */
     .teams-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-    @media (max-width: 700px) { .teams-grid { grid-template-columns: repeat(2, 1fr); } }
     .team-card { border-radius: 20px; padding: 20px 14px; color: white; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); cursor: pointer; transition: transform 0.18s, box-shadow 0.18s; border: none; font-family: 'Cairo', sans-serif; width: 100%; }
     .team-card:hover { transform: scale(1.04); box-shadow: 0 8px 28px rgba(0,0,0,0.18); }
     .team-card.selected { outline: 4px solid rgba(255,255,255,0.7); transform: scale(1.04); }
@@ -154,13 +198,13 @@
     .team-detail-body { padding: 18px; }
     .members-label { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
     .members-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    @media (max-width: 600px) { .members-grid { grid-template-columns: 1fr; } }
     .member-card { display: flex; align-items: center; gap: 10px; border-radius: 12px; padding: 10px 14px; }
     .member-num { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 13px; flex-shrink: 0; }
     .member-name { font-size: 13px; font-weight: 600; }
 
     /* SCHEDULE */
-    .schedule-table { border-radius: 16px; overflow: hidden; }
+    .schedule-table { border-radius: 16px; overflow: hidden; overflow-x: auto; }
+    .schedule-table table { min-width: 480px; }
     .schedule-thead { background: linear-gradient(135deg, #38bdf8, #a78bfa, #f472b6); }
     .schedule-thead th { color: white; font-weight: 700; font-size: 13px; padding: 12px 16px; text-align: right; }
     .table-row td { padding: 12px 16px; font-size: 13px; }
@@ -173,7 +217,6 @@
 
     /* TASKS */
     .tasks-team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-    @media (max-width: 700px) { .tasks-team-grid { grid-template-columns: repeat(2, 1fr); } }
     .task-team-btn { border-radius: 14px; padding: 14px; color: white; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; border: none; font-family: 'Cairo', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.12); transition: transform 0.18s; }
     .task-team-btn:hover { transform: scale(1.04); }
     .task-team-btn.selected { outline: 4px solid rgba(255,255,255,0.7); transform: scale(1.04); }
@@ -197,12 +240,10 @@
 
     /* COMPETITIONS */
     .comp-day-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    @media (max-width: 600px) { .comp-day-grid { grid-template-columns: 1fr; } }
-    .comp-day-card { border-radius: 16px; padding: 18px; color: white; display: flex; flex-direction: column; gap: 12px; }
-    .comp-day-title { font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-    .comp-slot { border-radius: 12px; padding: 14px; background: rgba(255,255,255,0.15); display: flex; flex-direction: column; gap: 8px; }
-    .comp-slot-title { font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
-    .comp-slot-link { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.25); color: white; text-decoration: none; border-radius: 8px; padding: 7px 14px; font-size: 12px; font-weight: 700; font-family: 'Cairo', sans-serif; transition: background 0.2s; border: none; cursor: pointer; }
+    .comp-day-card { border-radius: 16px; padding: 20px; color: white; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; }
+    .comp-day-title { font-size: 17px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+    .comp-day-icon { font-size: 34px; }
+    .comp-slot-link { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.25); color: white; text-decoration: none; border-radius: 10px; padding: 10px 20px; font-size: 13px; font-weight: 700; font-family: 'Cairo', sans-serif; transition: background 0.2s; border: none; cursor: pointer; }
     .comp-slot-link:hover { background: rgba(255,255,255,0.4); }
     .comp-c1 { background: linear-gradient(135deg, #38bdf8, #2563eb); }
     .comp-c2 { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
@@ -212,17 +253,38 @@
     body .arch-section-label { color: #475569; }
     body.dark .arch-section-label { color: #9ca3af; }
     .logo-card { border-radius: 16px; padding: 28px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-    .logo-card img { width: 180px; border-radius: 12px; }
+    .logo-card img { width: 180px; border-radius: 12px; max-width: 100%; }
 
     .empty-hint { text-align: center; padding: 40px 0; font-size: 13px; }
     .empty-hint .big-emoji { font-size: 36px; margin-bottom: 8px; }
+
+    /* ===== RESPONSIVE (MOBILE) ===== */
+    @media (max-width: 700px) {
+      .teams-grid, .tasks-team-grid { grid-template-columns: repeat(2, 1fr); }
+      .members-grid, .comp-day-grid { grid-template-columns: 1fr; }
+      .content { padding: 18px 14px; gap: 20px; }
+      .topbar { padding: 12px 14px; }
+      .topbar-title { display: none; }
+      .topbar-center { font-size: 14px; }
+      .hero { padding: 22px 16px; }
+      .hero img { width: 90px; }
+      .hero h1 { font-size: 18px; }
+      .sidebar { width: 78%; max-width: 300px; }
+    }
+    @media (max-width: 420px) {
+      .teams-grid, .tasks-team-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
 
+<!-- SIDEBAR OVERLAY (mobile+desktop backdrop) -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeMenu()"></div>
+
 <!-- SIDEBAR -->
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
   <div class="sidebar-logo-area">
+    <button class="sidebar-close-btn" onclick="closeMenu()" aria-label="إغلاق القائمة">✕</button>
     <img src="https://raw.githubusercontent.com/YoussefMicheal/Promise_of_life_conference/main/2.jpeg" alt="VIVA 2026"/>
     <span>VIVA 2026</span>
   </div>
@@ -243,6 +305,7 @@
   <!-- TOPBAR -->
   <div class="topbar">
     <div class="topbar-left">
+      <button class="menu-btn" onclick="openMenu()" aria-label="القائمة">☰</button>
       <img src="https://raw.githubusercontent.com/YoussefMicheal/Promise_of_life_conference/main/2.jpeg" alt="VIVA 2026"
         onerror="this.style.display='none';document.getElementById('topbar-logo-fallback').style.display='flex'"/>
       <div id="topbar-logo-fallback" style="display:none;width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#38bdf8,#a78bfa,#f472b6);align-items:center;justify-content:center;color:white;font-size:13px;font-weight:800;flex-shrink:0">V</div>
@@ -373,27 +436,15 @@
     <div class="comp-day-grid">
       <!-- DAY 1 -->
       <div class="comp-day-card comp-c1">
-        <div class="comp-day-title">📅 اليوم الأول</div>
-        <div class="comp-slot">
-          <div class="comp-slot-title">🌅 التاسك الصباحي</div>
-          <a class="comp-slot-link" href="https://forms.google.com" target="_blank">📝 افتح الفورم</a>
-        </div>
-        <div class="comp-slot">
-          <div class="comp-slot-title">🌙 التاسك المسائي</div>
-          <a class="comp-slot-link" href="https://forms.google.com" target="_blank">📝 افتح الفورم</a>
-        </div>
+        <div class="comp-day-icon">📅</div>
+        <div class="comp-day-title">مسابقة اليوم الأول</div>
+        <a class="comp-slot-link" href="https://forms.google.com" target="_blank">📝 افتح الفورم</a>
       </div>
       <!-- DAY 2 -->
       <div class="comp-day-card comp-c2">
-        <div class="comp-day-title">📅 اليوم التاني</div>
-        <div class="comp-slot">
-          <div class="comp-slot-title">🌅 التاسك الصباحي</div>
-          <a class="comp-slot-link" href="https://forms.google.com" target="_blank">📝 افتح الفورم</a>
-        </div>
-        <div class="comp-slot">
-          <div class="comp-slot-title">🌙 التاسك المسائي</div>
-          <a class="comp-slot-link" href="https://forms.google.com" target="_blank">📝 افتح الفورم</a>
-        </div>
+        <div class="comp-day-icon">📅</div>
+        <div class="comp-day-title">مسابقة اليوم التاني</div>
+        <a class="comp-slot-link" href="https://forms.google.com" target="_blank">📝 افتح الفورم</a>
       </div>
     </div>
   </div>
@@ -467,6 +518,7 @@
     document.getElementById('page-' + id).classList.add('active');
     if (btn) btn.classList.add('active');
     document.getElementById('page-title').textContent = pageTitles[id];
+    closeMenu();
   }
 
   /* ========== DATE ========== */
@@ -482,6 +534,16 @@
   if (localStorage.getItem('viva-theme') === 'dark') {
     document.body.classList.add('dark');
     document.getElementById('toggle-knob').textContent = '🌙';
+  }
+
+  /* ========== SIDEBAR MENU (mobile + desktop) ========== */
+  function openMenu() {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('sidebar-overlay').classList.add('show');
+  }
+  function closeMenu() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar-overlay').classList.remove('show');
   }
 
   /* ========== TEAMS ========== */
