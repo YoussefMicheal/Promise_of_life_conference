@@ -243,7 +243,9 @@
   <!-- TOPBAR -->
   <div class="topbar">
     <div class="topbar-left">
-      <img src="https://raw.githubusercontent.com/YoussefMicheal/Promise_of_life_conference/main/2.jpeg" alt="VIVA 2026"/>
+      <img src="https://raw.githubusercontent.com/YoussefMicheal/Promise_of_life_conference/main/2.jpeg" alt="VIVA 2026"
+        onerror="this.style.display='none';document.getElementById('topbar-logo-fallback').style.display='flex'"/>
+      <div id="topbar-logo-fallback" style="display:none;width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#38bdf8,#a78bfa,#f472b6);align-items:center;justify-content:center;color:white;font-size:13px;font-weight:800;flex-shrink:0">V</div>
       <span class="topbar-title">VIVA 2026</span>
     </div>
     <div class="topbar-center" id="page-title">الصفحة الرئيسية</div>
@@ -310,11 +312,7 @@
           </tbody>
         </table>
       </div>
-      <div class="img-placeholder">
-        <div class="ph-icon">🖼️</div>
-        <p>صورة جدول اليوم</p>
-        <span>يمكنك إضافة الصورة هنا</span>
-      </div>
+
     </section>
   </div>
 
@@ -451,14 +449,14 @@
   const teamNames = { 1:"تيم 1", 2:"تيم 2", 3:"تيم 3", 4:"تيم 4" };
 
   const tasks = {
-    1: [ { morning:"التاسك الصباحي - اليوم الأول",  evening:"التاسك المسائي - اليوم الأول"  },
-         { morning:"التاسك الصباحي - اليوم التاني", evening:"التاسك المسائي - اليوم التاني" } ],
-    2: [ { morning:"التاسك الصباحي - اليوم الأول",  evening:"التاسك المسائي - اليوم الأول"  },
-         { morning:"التاسك الصباحي - اليوم التاني", evening:"التاسك المسائي - اليوم التاني" } ],
-    3: [ { morning:"التاسك الصباحي - اليوم الأول",  evening:"التاسك المسائي - اليوم الأول"  },
-         { morning:"التاسك الصباحي - اليوم التاني", evening:"التاسك المسائي - اليوم التاني" } ],
-    4: [ { morning:"التاسك الصباحي - اليوم الأول",  evening:"التاسك المسائي - اليوم الأول"  },
-         { morning:"التاسك الصباحي - اليوم التاني", evening:"التاسك المسائي - اليوم التاني" } ],
+    1: [ { morning:"التاسك الصباحي - اليوم الأول",  morningLink:"https://forms.google.com",  evening:"التاسك المسائي - اليوم الأول",  eveningLink:"https://forms.google.com"  },
+         { morning:"التاسك الصباحي - اليوم التاني", morningLink:"https://forms.google.com",  evening:"التاسك المسائي - اليوم التاني", eveningLink:"https://forms.google.com"  } ],
+    2: [ { morning:"التاسك الصباحي - اليوم الأول",  morningLink:"https://forms.google.com",  evening:"التاسك المسائي - اليوم الأول",  eveningLink:"https://forms.google.com"  },
+         { morning:"التاسك الصباحي - اليوم التاني", morningLink:"https://forms.google.com",  evening:"التاسك المسائي - اليوم التاني", eveningLink:"https://forms.google.com"  } ],
+    3: [ { morning:"التاسك الصباحي - اليوم الأول",  morningLink:"https://forms.google.com",  evening:"التاسك المسائي - اليوم الأول",  eveningLink:"https://forms.google.com"  },
+         { morning:"التاسك الصباحي - اليوم التاني", morningLink:"https://forms.google.com",  evening:"التاسك المسائي - اليوم التاني", eveningLink:"https://forms.google.com"  } ],
+    4: [ { morning:"التاسك الصباحي - اليوم الأول",  morningLink:"https://forms.google.com",  evening:"التاسك المسائي - اليوم الأول",  eveningLink:"https://forms.google.com"  },
+         { morning:"التاسك الصباحي - اليوم التاني", morningLink:"https://forms.google.com",  evening:"التاسك المسائي - اليوم التاني", eveningLink:"https://forms.google.com"  } ],
   };
 
   /* ========== NAV ========== */
@@ -554,10 +552,12 @@
           <div class="task-morning">
             <div class="task-label"><span class="task-label-icon">🌅</span><span class="task-morning-title">التاسك الصباحي</span></div>
             <p class="task-text">${day.morning}</p>
+            <a class="comp-slot-link" href="${day.morningLink}" target="_blank" style="margin-top:10px;display:inline-flex;align-items:center;gap:6px;background:rgba(3,105,161,0.15);color:#0369a1;text-decoration:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;font-family:'Cairo',sans-serif;transition:background 0.2s;">📝 افتح الفورم</a>
           </div>
           <div class="task-evening">
             <div class="task-label"><span class="task-label-icon">🌙</span><span class="task-evening-title">التاسك المسائي</span></div>
             <p class="task-text">${day.evening}</p>
+            <a class="comp-slot-link" href="${day.eveningLink}" target="_blank" style="margin-top:10px;display:inline-flex;align-items:center;gap:6px;background:rgba(109,40,217,0.15);color:#6d28d9;text-decoration:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;font-family:'Cairo',sans-serif;transition:background 0.2s;">📝 افتح الفورم</a>
           </div>
         </div>
       </div>`).join('');
