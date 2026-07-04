@@ -8,12 +8,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ===== RESET & BASE ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { font-family: 'Cairo', sans-serif; height: 100%; }
     body { display: flex; min-height: 100vh; transition: background 0.3s, color 0.3s; }
 
-    /* ===== LIGHT MODE ===== */
+    /* LIGHT */
     body { background: #f8fafc; color: #1e293b; }
     .sidebar { background: #ffffff; border-left: 1px solid #e2e8f0; box-shadow: 0 2px 16px rgba(0,0,0,0.07); }
     .sidebar-footer { border-top: 1px solid #f1f5f9; color: #94a3b8; }
@@ -48,8 +47,10 @@
     .nav-label { color: #94a3b8; }
     .empty-hint { color: #94a3b8; }
     .schedule-divider { border-color: #f1f5f9; }
+    .comp-link-btn { background: #f0f9ff; border: 1px solid #bae6fd; color: #0369a1; }
+    .comp-link-btn:hover { background: #e0f2fe; }
 
-    /* ===== DARK MODE ===== */
+    /* DARK */
     body.dark { background: #030712; color: #f1f5f9; }
     body.dark .sidebar { background: #111827; border-left-color: #1f2937; box-shadow: 0 2px 16px rgba(0,0,0,0.4); }
     body.dark .sidebar-footer { border-top-color: #1f2937; color: #374151; }
@@ -84,23 +85,12 @@
     body.dark .nav-label { color: #374151; }
     body.dark .empty-hint { color: #4b5563; }
     body.dark .schedule-divider { border-color: #374151; }
+    body.dark .comp-link-btn { background: rgba(14,116,144,0.15); border-color: #164e63; color: #7dd3fc; }
+    body.dark .comp-link-btn:hover { background: rgba(14,116,144,0.25); }
 
-    /* ===== LAYOUT ===== */
-    .sidebar {
-      width: 240px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      right: 0; top: 0; bottom: 0;
-      z-index: 100;
-      overflow-y: auto;
-    }
-    .sidebar-logo-area {
-      padding: 20px;
-      text-align: center;
-      border-bottom: 1px solid transparent;
-    }
+    /* LAYOUT */
+    .sidebar { width: 240px; min-height: 100vh; display: flex; flex-direction: column; position: fixed; right: 0; top: 0; bottom: 0; z-index: 100; overflow-y: auto; }
+    .sidebar-logo-area { padding: 20px; text-align: center; border-bottom: 1px solid transparent; }
     body .sidebar-logo-area { border-bottom-color: #e2e8f0; }
     body.dark .sidebar-logo-area { border-bottom-color: #1f2937; }
     .sidebar-logo-area img { width: 110px; border-radius: 12px; display: block; margin: 0 auto 8px; }
@@ -108,27 +98,12 @@
     body.dark .sidebar-logo-area span { color: #374151; }
     .sidebar-nav { flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
     .nav-label { font-size: 10px; letter-spacing: 0.12em; padding: 8px 12px 2px; text-transform: uppercase; font-weight: 700; }
-    .nav-btn {
-      display: flex; align-items: center; gap: 10px;
-      padding: 11px 16px;
-      border-radius: 12px;
-      border: none; border-right: 3px solid transparent;
-      cursor: pointer; width: 100%;
-      font-family: 'Cairo', sans-serif;
-      font-size: 13px; font-weight: 600;
-      text-align: right;
-      transition: background 0.18s, color 0.18s;
-      background: transparent;
-    }
+    .nav-btn { display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-radius: 12px; border: none; border-right: 3px solid transparent; cursor: pointer; width: 100%; font-family: 'Cairo', sans-serif; font-size: 13px; font-weight: 600; text-align: right; transition: background 0.18s, color 0.18s; background: transparent; }
     .nav-btn .icon { font-size: 16px; }
     .sidebar-footer { padding: 14px; text-align: center; font-size: 11px; }
 
     .main { margin-right: 240px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
-    .topbar {
-      padding: 14px 28px;
-      display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; z-index: 50;
-    }
+    .topbar { padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
     .topbar-left { display: flex; align-items: center; gap: 10px; }
     .topbar-left img { height: 32px; border-radius: 8px; }
     .topbar-title { font-size: 14px; font-weight: 700; }
@@ -136,114 +111,62 @@
     .topbar-right { display: flex; align-items: center; gap: 12px; }
     .topbar-date { font-size: 12px; }
 
-    /* TOGGLE */
     .toggle-wrap { display: flex; align-items: center; cursor: pointer; }
     .toggle-bg { width: 48px; height: 24px; border-radius: 50px; position: relative; transition: background 0.3s; }
-    .toggle-knob {
-      position: absolute;
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      top: 3px; left: 3px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px;
-      transition: transform 0.3s;
-    }
+    .toggle-knob { position: absolute; width: 18px; height: 18px; border-radius: 50%; top: 3px; left: 3px; display: flex; align-items: center; justify-content: center; font-size: 11px; transition: transform 0.3s; }
     body.dark .toggle-knob { transform: translateX(24px); }
 
-    /* CONTENT */
-    .content { padding: 24px 28px; max-width: 920px; width: 100%; margin: 0 auto; display: none; flex-direction: column; gap: 28px; }
+    .content { padding: 24px 28px; max-width: 960px; width: 100%; margin: 0 auto; display: none; flex-direction: column; gap: 28px; }
     .content.active { display: flex; }
     .fade-in { animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* HERO BANNER */
-    .hero {
-      border-radius: 20px;
-      padding: 28px 24px;
-      text-align: center;
-      background: linear-gradient(135deg, #38bdf8, #a78bfa, #f472b6);
-      color: white;
-    }
+    /* HERO */
+    .hero { border-radius: 20px; padding: 28px 24px; text-align: center; background: linear-gradient(135deg, #38bdf8, #a78bfa, #f472b6); color: white; }
     .hero img { width: 120px; border-radius: 14px; background: white; padding: 4px; margin: 0 auto 12px; display: block; }
     .hero h1 { font-size: 22px; font-weight: 800; }
 
-    /* SECTION HEADING */
     .section-heading { font-size: 16px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
     .heading-bar { width: 64px; height: 4px; border-radius: 4px; background: linear-gradient(135deg, #38bdf8, #a78bfa, #f472b6); margin-bottom: 20px; }
 
     /* TEAMS GRID */
     .teams-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
     @media (max-width: 700px) { .teams-grid { grid-template-columns: repeat(2, 1fr); } }
-    .team-card {
-      border-radius: 20px;
-      padding: 20px 14px;
-      color: white;
-      display: flex; flex-direction: column; align-items: center; gap: 10px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-      cursor: pointer;
-      transition: transform 0.18s, box-shadow 0.18s;
-      border: none; font-family: 'Cairo', sans-serif; width: 100%;
-    }
+    .team-card { border-radius: 20px; padding: 20px 14px; color: white; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); cursor: pointer; transition: transform 0.18s, box-shadow 0.18s; border: none; font-family: 'Cairo', sans-serif; width: 100%; }
     .team-card:hover { transform: scale(1.04); box-shadow: 0 8px 28px rgba(0,0,0,0.18); }
     .team-card.selected { outline: 4px solid rgba(255,255,255,0.7); transform: scale(1.04); }
-    .team-photo-circle {
-      width: 78px; height: 78px; border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      border: 2px solid rgba(255,255,255,0.5);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 32px;
-    }
+    .team-photo-circle { width: 78px; height: 78px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.5); display: flex; align-items: center; justify-content: center; font-size: 32px; overflow: hidden; }
+    .team-photo-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .team-name { font-size: 17px; font-weight: 700; }
     .team-rank { font-size: 11px; opacity: 0.8; }
-    .team-img-label { font-size: 11px; font-weight: 600; background: rgba(255,255,255,0.2); border-radius: 8px; padding: 3px 10px; }
     .t1 { background: linear-gradient(135deg, #38bdf8, #2563eb); }
     .t2 { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
     .t3 { background: linear-gradient(135deg, #f472b6, #e11d48); }
     .t4 { background: linear-gradient(135deg, #34d399, #0d9488); }
 
-    /* TEAM DETAIL CARD */
+    /* TEAM DETAIL */
     .team-detail { border-radius: 20px; overflow: hidden; }
-    .team-detail-header {
-      padding: 20px; color: white;
-      display: flex; align-items: center; gap: 14px;
-    }
-    .team-detail-header .big-circle {
-      width: 64px; height: 64px; border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      border: 2px solid rgba(255,255,255,0.5);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px; flex-shrink: 0;
-    }
+    .team-detail-header { padding: 20px; color: white; display: flex; align-items: center; gap: 14px; }
+    .team-detail-header .big-circle { width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.5); display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; overflow: hidden; }
+    .team-detail-header .big-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .team-detail-header h3 { font-size: 19px; font-weight: 800; }
     .team-detail-header p { font-size: 12px; opacity: 0.8; margin-top: 2px; }
     .team-detail-body { padding: 18px; }
     .members-label { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
     .members-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .member-card {
-      display: flex; align-items: center; gap: 10px;
-      border-radius: 12px; padding: 10px 14px;
-    }
-    .member-num {
-      width: 34px; height: 34px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-weight: 700; font-size: 13px; flex-shrink: 0;
-    }
+    @media (max-width: 600px) { .members-grid { grid-template-columns: 1fr; } }
+    .member-card { display: flex; align-items: center; gap: 10px; border-radius: 12px; padding: 10px 14px; }
+    .member-num { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 13px; flex-shrink: 0; }
     .member-name { font-size: 13px; font-weight: 600; }
 
-    /* SCHEDULE TABLE */
+    /* SCHEDULE */
     .schedule-table { border-radius: 16px; overflow: hidden; }
     .schedule-thead { background: linear-gradient(135deg, #38bdf8, #a78bfa, #f472b6); }
     .schedule-thead th { color: white; font-weight: 700; font-size: 13px; padding: 12px 16px; text-align: right; }
-    .table-row { transition: background 0.15s; }
     .table-row td { padding: 12px 16px; font-size: 13px; }
-    .schedule-divider { }
 
     /* IMAGE PLACEHOLDER */
-    .img-placeholder {
-      border-radius: 16px; height: 180px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 6px; margin-top: 14px;
-    }
+    .img-placeholder { border-radius: 16px; height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; margin-top: 14px; }
     .img-placeholder .ph-icon { font-size: 36px; }
     .img-placeholder p { font-size: 13px; font-weight: 600; }
     .img-placeholder span { font-size: 11px; }
@@ -251,14 +174,7 @@
     /* TASKS */
     .tasks-team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
     @media (max-width: 700px) { .tasks-team-grid { grid-template-columns: repeat(2, 1fr); } }
-    .task-team-btn {
-      border-radius: 14px; padding: 14px;
-      color: white; font-weight: 700; font-size: 13px;
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-      cursor: pointer; border: none; font-family: 'Cairo', sans-serif;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-      transition: transform 0.18s;
-    }
+    .task-team-btn { border-radius: 14px; padding: 14px; color: white; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; border: none; font-family: 'Cairo', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.12); transition: transform 0.18s; }
     .task-team-btn:hover { transform: scale(1.04); }
     .task-team-btn.selected { outline: 4px solid rgba(255,255,255,0.7); transform: scale(1.04); }
 
@@ -267,14 +183,7 @@
     .task-banner p { font-size: 12px; opacity: 0.8; margin-top: 4px; }
 
     .day-card { border-radius: 16px; overflow: hidden; }
-    .day-btn {
-      width: 100%; display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 20px;
-      background: transparent; border: none; cursor: pointer;
-      font-family: 'Cairo', sans-serif; font-size: 14px; font-weight: 700;
-      border-radius: 16px;
-      transition: background 0.15s;
-    }
+    .day-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: transparent; border: none; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 14px; font-weight: 700; border-radius: 16px; transition: background 0.15s; }
     .day-btn-left { display: flex; align-items: center; gap: 8px; }
     .day-content { border-top: 1px solid transparent; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
     .task-morning, .task-evening { border-radius: 14px; padding: 14px; }
@@ -282,6 +191,21 @@
     .task-label-icon { font-size: 18px; }
     .task-label span { font-size: 13px; font-weight: 700; }
     .task-text { font-size: 13px; line-height: 1.7; }
+
+    /* COMPETITION LINK BUTTON */
+    .comp-link-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 10px; font-family: 'Cairo', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; border: none; text-decoration: none; transition: background 0.2s; margin-top: 10px; }
+
+    /* COMPETITIONS */
+    .comp-day-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 600px) { .comp-day-grid { grid-template-columns: 1fr; } }
+    .comp-day-card { border-radius: 16px; padding: 18px; color: white; display: flex; flex-direction: column; gap: 12px; }
+    .comp-day-title { font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+    .comp-slot { border-radius: 12px; padding: 14px; background: rgba(255,255,255,0.15); display: flex; flex-direction: column; gap: 8px; }
+    .comp-slot-title { font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+    .comp-slot-link { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.25); color: white; text-decoration: none; border-radius: 8px; padding: 7px 14px; font-size: 12px; font-weight: 700; font-family: 'Cairo', sans-serif; transition: background 0.2s; border: none; cursor: pointer; }
+    .comp-slot-link:hover { background: rgba(255,255,255,0.4); }
+    .comp-c1 { background: linear-gradient(135deg, #38bdf8, #2563eb); }
+    .comp-c2 { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
 
     /* ARCHIVES */
     .arch-section-label { font-size: 14px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
@@ -307,6 +231,7 @@
     <button class="nav-btn active" onclick="showPage('home', this)"><span class="icon">🏠</span> الصفحة الرئيسية</button>
     <button class="nav-btn"        onclick="showPage('teams', this)"><span class="icon">🏆</span> التيمات</button>
     <button class="nav-btn"        onclick="showPage('tasks', this)"><span class="icon">📋</span> التاسكات</button>
+    <button class="nav-btn"        onclick="showPage('competitions', this)"><span class="icon">🎯</span> المسابقات</button>
     <button class="nav-btn"        onclick="showPage('archives', this)"><span class="icon">📚</span> المحفوظات</button>
   </nav>
   <div class="sidebar-footer">VIVA 2026 ©</div>
@@ -332,7 +257,7 @@
     </div>
   </div>
 
-  <!-- HOME PAGE -->
+  <!-- ══ HOME ══ -->
   <div class="content active fade-in" id="page-home">
     <div class="hero">
       <img src="https://raw.githubusercontent.com/YoussefMicheal/Promise_of_life_conference/main/2.jpeg" alt="VIVA 2026"/>
@@ -347,25 +272,21 @@
           <div class="team-photo-circle">🥇</div>
           <div class="team-name">تيم 1</div>
           <div class="team-rank">المركز الأول</div>
-          <div class="team-img-label">صورة التيم</div>
         </div>
         <div class="team-card t2">
           <div class="team-photo-circle">🥇</div>
           <div class="team-name">تيم 2</div>
           <div class="team-rank">المركز الأول</div>
-          <div class="team-img-label">صورة التيم</div>
         </div>
         <div class="team-card t3">
           <div class="team-photo-circle">🥇</div>
           <div class="team-name">تيم 3</div>
           <div class="team-rank">المركز الأول</div>
-          <div class="team-img-label">صورة التيم</div>
         </div>
         <div class="team-card t4">
           <div class="team-photo-circle">🥇</div>
           <div class="team-name">تيم 4</div>
           <div class="team-rank">المركز الأول</div>
-          <div class="team-img-label">صورة التيم</div>
         </div>
       </div>
     </section>
@@ -377,37 +298,15 @@
         <table style="width:100%;border-collapse:collapse">
           <thead class="schedule-thead">
             <tr>
-              <th>الوقت</th>
-              <th>الفعالية</th>
-              <th>التيم</th>
+              <th>الوقت</th><th>الفعالية</th><th>التيم</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="table-row schedule-divider">
-              <td class="table-cell-time">08:00 ص</td>
-              <td class="table-cell-event">التسجيل والاستقبال</td>
-              <td class="table-cell-team">الكل</td>
-            </tr>
-            <tr class="table-row schedule-divider">
-              <td class="table-cell-time">09:00 ص</td>
-              <td class="table-cell-event">التاسك الصباحي</td>
-              <td class="table-cell-team">كل التيمات</td>
-            </tr>
-            <tr class="table-row schedule-divider">
-              <td class="table-cell-time">12:00 م</td>
-              <td class="table-cell-event">استراحة الغداء</td>
-              <td class="table-cell-team">الكل</td>
-            </tr>
-            <tr class="table-row schedule-divider">
-              <td class="table-cell-time">03:00 م</td>
-              <td class="table-cell-event">التاسك المسائي</td>
-              <td class="table-cell-team">كل التيمات</td>
-            </tr>
-            <tr class="table-row">
-              <td class="table-cell-time">06:00 م</td>
-              <td class="table-cell-event">ختام اليوم الأول</td>
-              <td class="table-cell-team">الكل</td>
-            </tr>
+            <tr class="table-row schedule-divider"><td class="table-cell-time">08:00 ص</td><td class="table-cell-event">التسجيل والاستقبال</td><td class="table-cell-team">الكل</td></tr>
+            <tr class="table-row schedule-divider"><td class="table-cell-time">09:00 ص</td><td class="table-cell-event">التاسك الصباحي</td><td class="table-cell-team">كل التيمات</td></tr>
+            <tr class="table-row schedule-divider"><td class="table-cell-time">12:00 م</td><td class="table-cell-event">استراحة الغداء</td><td class="table-cell-team">الكل</td></tr>
+            <tr class="table-row schedule-divider"><td class="table-cell-time">03:00 م</td><td class="table-cell-event">التاسك المسائي</td><td class="table-cell-team">كل التيمات</td></tr>
+            <tr class="table-row"><td class="table-cell-time">06:00 م</td><td class="table-cell-event">ختام اليوم الأول</td><td class="table-cell-team">الكل</td></tr>
           </tbody>
         </table>
       </div>
@@ -419,11 +318,10 @@
     </section>
   </div>
 
-  <!-- TEAMS PAGE -->
+  <!-- ══ TEAMS ══ -->
   <div class="content fade-in" id="page-teams">
     <div class="section-heading"><span>🏆</span> التيمات</div>
     <div class="heading-bar"></div>
-
     <div class="teams-grid">
       <button class="team-card t1" onclick="selectTeam(1, this)">
         <div class="team-photo-circle">📸</div>
@@ -446,7 +344,6 @@
         <div class="team-rank">اضغط لعرض الأعضاء</div>
       </button>
     </div>
-
     <div id="team-detail-area"></div>
     <div class="empty-hint" id="teams-empty">
       <div class="big-emoji">👆</div>
@@ -454,18 +351,16 @@
     </div>
   </div>
 
-  <!-- TASKS PAGE -->
+  <!-- ══ TASKS ══ -->
   <div class="content fade-in" id="page-tasks">
     <div class="section-heading"><span>📋</span> التاسكات</div>
     <div class="heading-bar"></div>
-
     <div class="tasks-team-grid">
       <button class="task-team-btn t1" onclick="selectTaskTeam(1, this)">📋 تيم 1</button>
       <button class="task-team-btn t2" onclick="selectTaskTeam(2, this)">📋 تيم 2</button>
       <button class="task-team-btn t3" onclick="selectTaskTeam(3, this)">📋 تيم 3</button>
       <button class="task-team-btn t4" onclick="selectTaskTeam(4, this)">📋 تيم 4</button>
     </div>
-
     <div id="tasks-detail-area"></div>
     <div class="empty-hint" id="tasks-empty">
       <div class="big-emoji">👆</div>
@@ -473,7 +368,39 @@
     </div>
   </div>
 
-  <!-- ARCHIVES PAGE -->
+  <!-- ══ COMPETITIONS ══ -->
+  <div class="content fade-in" id="page-competitions">
+    <div class="section-heading"><span>🎯</span> المسابقات</div>
+    <div class="heading-bar"></div>
+    <div class="comp-day-grid">
+      <!-- DAY 1 -->
+      <div class="comp-day-card comp-c1">
+        <div class="comp-day-title">📅 اليوم الأول</div>
+        <div class="comp-slot">
+          <div class="comp-slot-title">🌅 التاسك الصباحي</div>
+          <a class="comp-slot-link" href="https://forms.google.com" target="_blank">📝 افتح الفورم</a>
+        </div>
+        <div class="comp-slot">
+          <div class="comp-slot-title">🌙 التاسك المسائي</div>
+          <a class="comp-slot-link" href="https://forms.google.com" target="_blank">📝 افتح الفورم</a>
+        </div>
+      </div>
+      <!-- DAY 2 -->
+      <div class="comp-day-card comp-c2">
+        <div class="comp-day-title">📅 اليوم التاني</div>
+        <div class="comp-slot">
+          <div class="comp-slot-title">🌅 التاسك الصباحي</div>
+          <a class="comp-slot-link" href="https://forms.google.com" target="_blank">📝 افتح الفورم</a>
+        </div>
+        <div class="comp-slot">
+          <div class="comp-slot-title">🌙 التاسك المسائي</div>
+          <a class="comp-slot-link" href="https://forms.google.com" target="_blank">📝 افتح الفورم</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ARCHIVES ══ -->
   <div class="content fade-in" id="page-archives">
     <div class="section-heading"><span>📚</span> المحفوظات</div>
     <div class="heading-bar"></div>
@@ -488,32 +415,10 @@
 
     <section>
       <div class="arch-section-label"><span>✝️</span> الكونتينت الروحي</div>
-      <div style="display:flex;flex-direction:column;gap:12px">
-
-        <div class="card-bg" style="border-radius:16px;padding:18px">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-            <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#38bdf8,#a78bfa,#f472b6);display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;flex-shrink:0">1</div>
-            <span style="font-weight:700;font-size:14px" class="section-heading" style="margin:0;border:none">آية اليوم</span>
-          </div>
-          <p class="spiritual-text" style="font-size:13px;line-height:1.9;padding-right:40px">«أَنَا هُوَ الطَّرِيقُ وَالْحَقُّ وَالْحَيَاةُ» — يوحنا 14: 6</p>
-        </div>
-
-        <div class="card-bg" style="border-radius:16px;padding:18px">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-            <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#38bdf8,#a78bfa,#f472b6);display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;flex-shrink:0">2</div>
-            <span style="font-weight:700;font-size:14px" class="section-heading" style="margin:0">تأمل روحي</span>
-          </div>
-          <p class="spiritual-text" style="font-size:13px;line-height:1.9;padding-right:40px">الرب راعيَّ فلا يعوزني شيء، في مراعٍ خضراء يُربضني، إلى مياه الراحة يقودني.</p>
-        </div>
-
-        <div class="card-bg" style="border-radius:16px;padding:18px">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-            <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#38bdf8,#a78bfa,#f472b6);display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;flex-shrink:0">3</div>
-            <span style="font-weight:700;font-size:14px" class="section-heading" style="margin:0">صلاة اليوم</span>
-          </div>
-          <p class="spiritual-text" style="font-size:13px;line-height:1.9;padding-right:40px">يا ربنا، امنحنا قلوبًا مفتوحة لنعمتك ونورك، واجعلنا أدوات لمحبتك في هذا المؤتمر.</p>
-        </div>
-
+      <div class="card-bg" style="border-radius:16px;padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:120px;gap:8px">
+        <div style="font-size:32px">📖</div>
+        <p class="spiritual-text" style="font-size:15px;font-weight:700">اليوم الأول</p>
+        <p class="spiritual-text" style="font-size:12px">قريبًا يتم إضافة المحتوى الروحي هنا</p>
       </div>
     </section>
   </div>
@@ -522,15 +427,28 @@
 
 <script>
   /* ========== DATA ========== */
-  const teams = [
-    { id: 1, name: "تيم 1", cls: "t1", members: ["اسم العضو 1","اسم العضو 2","اسم العضو 3","اسم العضو 4"] },
-    { id: 2, name: "تيم 2", cls: "t2", members: ["اسم العضو 1","اسم العضو 2","اسم العضو 3","اسم العضو 4"] },
-    { id: 3, name: "تيم 3", cls: "t3", members: ["اسم العضو 1","اسم العضو 2","اسم العضو 3","اسم العضو 4"] },
-    { id: 4, name: "تيم 4", cls: "t4", members: ["اسم العضو 1","اسم العضو 2","اسم العضو 3","اسم العضو 4"] },
+  // 20 members per team
+  const memberNames = [
+    "اسم العضو 1","اسم العضو 2","اسم العضو 3","اسم العضو 4","اسم العضو 5",
+    "اسم العضو 6","اسم العضو 7","اسم العضو 8","اسم العضو 9","اسم العضو 10",
+    "اسم العضو 11","اسم العضو 12","اسم العضو 13","اسم العضو 14","اسم العضو 15",
+    "اسم العضو 16","اسم العضو 17","اسم العضو 18","اسم العضو 19","اسم العضو 20"
   ];
 
-  const teamColors = { 1:"linear-gradient(135deg,#38bdf8,#2563eb)", 2:"linear-gradient(135deg,#a78bfa,#7c3aed)", 3:"linear-gradient(135deg,#f472b6,#e11d48)", 4:"linear-gradient(135deg,#34d399,#0d9488)" };
-  const teamNames  = { 1:"تيم 1", 2:"تيم 2", 3:"تيم 3", 4:"تيم 4" };
+  const teams = [
+    { id:1, name:"تيم 1", cls:"t1", members: [...memberNames] },
+    { id:2, name:"تيم 2", cls:"t2", members: [...memberNames] },
+    { id:3, name:"تيم 3", cls:"t3", members: [...memberNames] },
+    { id:4, name:"تيم 4", cls:"t4", members: [...memberNames] },
+  ];
+
+  const teamColors = {
+    1:"linear-gradient(135deg,#38bdf8,#2563eb)",
+    2:"linear-gradient(135deg,#a78bfa,#7c3aed)",
+    3:"linear-gradient(135deg,#f472b6,#e11d48)",
+    4:"linear-gradient(135deg,#34d399,#0d9488)"
+  };
+  const teamNames = { 1:"تيم 1", 2:"تيم 2", 3:"تيم 3", 4:"تيم 4" };
 
   const tasks = {
     1: [ { morning:"التاسك الصباحي - اليوم الأول",  evening:"التاسك المسائي - اليوم الأول"  },
@@ -544,8 +462,7 @@
   };
 
   /* ========== NAV ========== */
-  const pageTitles = { home:"الصفحة الرئيسية", teams:"التيمات", tasks:"التاسكات", archives:"المحفوظات" };
-
+  const pageTitles = { home:"الصفحة الرئيسية", teams:"التيمات", tasks:"التاسكات", competitions:"المسابقات", archives:"المحفوظات" };
   function showPage(id, btn) {
     document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -570,26 +487,21 @@
   }
 
   /* ========== TEAMS ========== */
-  let activeTeamBtn = null;
-  let activeTeamId  = null;
-
+  let activeTeamBtn = null, activeTeamId = null;
   function selectTeam(id, btn) {
     if (activeTeamId === id) {
-      // deselect
       btn.classList.remove('selected');
       document.getElementById('team-detail-area').innerHTML = '';
       document.getElementById('teams-empty').style.display = '';
-      activeTeamBtn = null; activeTeamId = null;
-      return;
+      activeTeamBtn = null; activeTeamId = null; return;
     }
     if (activeTeamBtn) activeTeamBtn.classList.remove('selected');
     btn.classList.add('selected');
     activeTeamBtn = btn; activeTeamId = id;
     document.getElementById('teams-empty').style.display = 'none';
 
-    const team   = teams.find(t => t.id === id);
-    const color  = teamColors[id];
-
+    const team  = teams.find(t => t.id === id);
+    const color = teamColors[id];
     const membersHtml = team.members.map((m, i) => `
       <div class="member-card">
         <div class="member-num" style="background:${color}">${i+1}</div>
@@ -602,28 +514,24 @@
           <div class="big-circle">📸</div>
           <div>
             <h3>${team.name}</h3>
-            <p>صورة خاصة بالتيم</p>
+            <p>أعضاء التيم</p>
           </div>
         </div>
         <div class="team-detail-body">
-          <div class="members-label section-heading" style="margin:0 0 12px">أعضاء التيم</div>
+          <div class="members-label section-heading" style="margin:0 0 12px">أعضاء التيم (${team.members.length})</div>
           <div class="members-grid">${membersHtml}</div>
         </div>
       </div>`;
   }
 
   /* ========== TASKS ========== */
-  let activeTaskBtn   = null;
-  let activeTaskTeam  = null;
-  let expandedDay     = null;
-
+  let activeTaskBtn = null, activeTaskTeam = null, expandedDay = null;
   function selectTaskTeam(id, btn) {
     if (activeTaskTeam === id) {
       btn.classList.remove('selected');
       document.getElementById('tasks-detail-area').innerHTML = '';
       document.getElementById('tasks-empty').style.display = '';
-      activeTaskBtn = null; activeTaskTeam = null; expandedDay = null;
-      return;
+      activeTaskBtn = null; activeTaskTeam = null; expandedDay = null; return;
     }
     if (activeTaskBtn) activeTaskBtn.classList.remove('selected');
     btn.classList.add('selected');
@@ -636,7 +544,6 @@
     const color  = teamColors[id];
     const name   = teamNames[id];
     const dayArr = tasks[id];
-
     const daysHtml = dayArr.map((day, idx) => `
       <div class="day-card card-bg">
         <button class="day-btn" onclick="toggleDay(${idx})">
@@ -645,17 +552,11 @@
         </button>
         <div class="day-content schedule-divider" id="day-content-${idx}" style="display:${expandedDay===idx?'flex':'none'}">
           <div class="task-morning">
-            <div class="task-label">
-              <span class="task-label-icon">🌅</span>
-              <span class="task-morning-title">التاسك الصباحي</span>
-            </div>
+            <div class="task-label"><span class="task-label-icon">🌅</span><span class="task-morning-title">التاسك الصباحي</span></div>
             <p class="task-text">${day.morning}</p>
           </div>
           <div class="task-evening">
-            <div class="task-label">
-              <span class="task-label-icon">🌙</span>
-              <span class="task-evening-title">التاسك المسائي</span>
-            </div>
+            <div class="task-label"><span class="task-label-icon">🌙</span><span class="task-evening-title">التاسك المسائي</span></div>
             <p class="task-text">${day.evening}</p>
           </div>
         </div>
@@ -672,11 +573,7 @@
   }
 
   function toggleDay(idx) {
-    if (expandedDay === idx) {
-      expandedDay = null;
-    } else {
-      expandedDay = idx;
-    }
+    expandedDay = expandedDay === idx ? null : idx;
     renderTaskDetail(activeTaskTeam);
   }
 </script>
